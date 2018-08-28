@@ -17,7 +17,6 @@ template<typename T> class MessageDistributor : private boost::noncopyable
 		std::unique_ptr<FlexBarrier> m_preBarrierPtr;						// We attempt to use a Flex Barrier to implement an MessageDistributor item.
 		std::unique_ptr<FlexBarrier> m_postBarrierPtr;						// We attempt to use a pair of pre and post barriers to sync up exchanging threads [ Always 2 of them ].
 		T m_MessageItem;													// Underlying data of the MessageDistributor.
-		T exchange(const T&, const MessageDistributorType&);				// Underlying exchange method.
 
 	public:
 		MessageDistributor(const int&);										// Default Constructor. Takes number of parties.
