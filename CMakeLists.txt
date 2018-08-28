@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 2.8.4)
 project(MessageDistributor)
 
 include_directories(../FlexBarrier)
-link_directories("/home/anand/git/FlexBarrier")
+link_directories("$ENV{HOME}/git/FlexBarrier")
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Wall")
 

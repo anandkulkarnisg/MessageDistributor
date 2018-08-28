@@ -17,7 +17,7 @@ template<typename T> MessageDistributor<T>::MessageDistributor(const int& partic
 template<typename T> void MessageDistributor<T>::publish(const T& inputItem)
 {
 	// Internally just call the exchange method. As a producer we need to exchange the item and get nothing in return.
-	std::string temp = exchange(inputItem, MessageDistributorType::producer);
+	T temp = exchange(inputItem, MessageDistributorType::producer);
 }
 
 // Implement the recieve method using the exchange method.As a consumer we need to recieve the item and send in nothing.
@@ -59,7 +59,7 @@ template<typename T> T MessageDistributor<T>::exchange(const T& inputItem, const
 	if(type == MessageDistributorType::consumer)
 		return(m_MessageItem);
 	else
-		return("");
+		return(T());
 }
 
 template<typename T> void MessageDistributor<T>::reset()
