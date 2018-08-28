@@ -2,6 +2,7 @@
 #include<string>
 
 #include "MessageDistributor.h"
+#include "MessageDistributorImpl.cpp"
 
 using namespace std;
 
@@ -23,7 +24,7 @@ template<typename T> void MessageDistributor<T>::publish(const T& inputItem)
 // Implement the recieve method using the exchange method.As a consumer we need to recieve the item and send in nothing.
 template<typename T> T MessageDistributor<T>::recieve()
 {
-	T returnMessage = exchange(std::string(""), MessageDistributorType::consumer);
+	T returnMessage = exchange(T(), MessageDistributorType::consumer);
 	return(returnMessage);
 }
 
@@ -70,4 +71,3 @@ template<typename T> void MessageDistributor<T>::reset()
 		m_postBarrierPtr->reset();	
 }
 
-template class MessageDistributor<std::string>;
