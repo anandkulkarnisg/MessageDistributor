@@ -3,7 +3,7 @@
 #include<memory>
 #include<mutex>
 #include<thread>
-#include<FlexBarrier.h>
+#include<CyclicBarrier.h>
 #include<boost/core/noncopyable.hpp>
 
 #ifndef MessageDistributor_H
@@ -14,8 +14,8 @@ enum class MessageDistributorType { producer , consumer };
 template<typename T> class MessageDistributor : private boost::noncopyable
 {
 	private:
-		std::unique_ptr<FlexBarrier> m_preBarrierPtr;						// We attempt to use a Flex Barrier to implement an MessageDistributor item.
-		std::unique_ptr<FlexBarrier> m_postBarrierPtr;						// We attempt to use a pair of pre and post barriers to sync up exchanging threads [ Always 2 of them ].
+		std::unique_ptr<CyclicBarrier> m_preBarrierPtr;						// We attempt to use a Flex Barrier to implement an MessageDistributor item.
+		std::unique_ptr<CyclicBarrier> m_postBarrierPtr;						// We attempt to use a pair of pre and post barriers to sync up exchanging threads [ Always 2 of them ].
 		T m_MessageItem;													// Underlying data of the MessageDistributor.
 
 	public:

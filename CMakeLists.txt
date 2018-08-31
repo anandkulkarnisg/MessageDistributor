@@ -1,8 +1,8 @@
 cmake_minimum_required(VERSION 2.8.4)
 project(MessageDistributor)
 
-include_directories(../FlexBarrier)
-link_directories("$ENV{HOME}/git/FlexBarrier")
+include_directories(../CyclicBarrier)
+link_directories("$ENV{HOME}/git/CyclicBarrier")
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Wall")
 
@@ -13,4 +13,4 @@ find_package(Threads REQUIRED)
 ADD_LIBRARY(MessageDistributor SHARED MessageDistributor.cpp)
 
 add_executable(Example1.out Example1.cpp)
-target_link_libraries(Example1.out MessageDistributor pthread PocoFoundation FlexBarrier)
+target_link_libraries(Example1.out MessageDistributor pthread PocoFoundation CyclicBarrier)

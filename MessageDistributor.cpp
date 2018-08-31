@@ -10,8 +10,8 @@ using namespace std;
 template<typename T> MessageDistributor<T>::MessageDistributor(const int& participantCount)
 {
 	// Takes the count of number of consumer threads needing the message. Producer is considered and counted implcitly below.
-	m_preBarrierPtr.reset(new FlexBarrier(participantCount+1));
-	m_postBarrierPtr.reset(new FlexBarrier(participantCount+1));
+	m_preBarrierPtr.reset(new CyclicBarrier(participantCount+1));
+	m_postBarrierPtr.reset(new CyclicBarrier(participantCount+1));
 }
 
 // Implement a publish method for the MessageDistributor.
