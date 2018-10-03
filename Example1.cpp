@@ -67,6 +67,7 @@ void consumerThread()
 
 // This implementation of a MessageDistributor can be used to implement either of the following.
 // 1. If you want a single message processed only 1 time by a consumer thread then simply create more consumer threads and implement a single consumer thread MessageDistributor.
+//    This is in principle equivalent to the multi threaded subscriber design.
 // 2. If you want the message to be consumed by all consumer threads then simply pass the number of consumerThreads to the MessageDistributors at the start of construction.
 
 int main(int argc, char* argv[])
@@ -89,7 +90,7 @@ int main(int argc, char* argv[])
 	t1.join();
 
 	// Join the consumer threads.
-	std::for_each(consumerThreads.begin(), consumerThreads.end(),[&](std::thread& t){ t.join();});
+	std::for_each(consumerThreads.begin(), consumerThreads.end(), [&](std::thread& t){ t.join();});
 
 	return(0);
 }
