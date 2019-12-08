@@ -9,22 +9,22 @@
 using namespace std;
 
 const int numConsumerThreads = 10;
-MessageDistributor<std::string> distributor(1); // Remember you need to pass the number of consumers waiting for producer.
-std::mutex cout_mutex;
-std::mutex consumer_mutex;
+MessageDistributor<string> distributor(1); // Remember you need to pass the number of consumers waiting for producer.
+mutex cout_mutex;
+mutex consumer_mutex;
 const long runDemoLoop = 10000;
 int consumerLoopCount=0;
 
-void printOut(const std::string& str1, const std::string& str2, const std::thread::id& id)
+void printOut(const string& str1, const string& str2, const thread::id& id)
 {
-	std::unique_lock<std::mutex> lock(cout_mutex);
-	std::cout << str1 << id << str2 << std::endl;
+	unique_lock<mutex> lock(cout_mutex);
+	cout << str1 << id << str2 << endl;
 	lock.unlock();
 }
 
-void producerThread(const std::vector<std::string>& dataSource)
+void producerThread(const vector<string>& dataSource)
 {
-	printOut("I am producer thread currently running from thread id =", "",  std::this_thread::get_id());
+	printOut("I am producer thread currently running from thread id =", "",  this_thread::get_id());
 	int i=0;
 
 	while(i<runDemoLoop)
@@ -33,9 +33,9 @@ void producerThread(const std::vector<std::string>& dataSource)
 		{
 			distributor.publish(dataSource[i]);
 		}
-		catch(const std::exception& e)
+		catch(const exception& e)
 		{
-			std::cout << e.what() << std::endl;
+			cout << e.what() << endl;
 		}
 		++i;
 	}
@@ -44,8 +44,8 @@ void producerThread(const std::vector<std::string>& dataSource)
 void consumerThread()
 {
 
-	printOut("I am consumer thread currently running from thread id =", "",  std::this_thread::get_id());
-	std::string returnString;
+	printOut("I am consumer thread currently running from thread id =", "",  this_thread::get_id());
+	string returnString;
 
 	while(consumerLoopCount<runDemoLoop)
 	{
@@ -56,12 +56,12 @@ void consumerThread()
 			{
 				returnString = distributor.recieve();         
 				++consumerLoopCount;
-				printOut("I am consumer thread currently running from thread id =", ".The value i am having now is = " + returnString, std::this_thread::get_id()); 
+				printOut("I am consumer thread currently running from thread id =", ".The value i am having now is = " + returnString, this_thread::get_id()); 
 			}
 		}
-		catch(const std::exception& e)
+		catch(const exception& e)
 		{
-			std::cout << e.what() << std::endl;
+			cout << e.what() << endl;
 		}
 	}
 }
@@ -77,25 +77,25 @@ void consumerThread()
 
 int main(int argc, char* argv[])
 {
-	std::vector<std::string> dataSource;
+	vector<string> dataSource;
 	dataSource.reserve(runDemoLoop);
 
 	for(unsigned int i=0; i<runDemoLoop; ++i)
-		dataSource.emplace_back("Sample Message : " + std::to_string(i));
+		dataSource.emplace_back("Sample Message : " + to_string(i));
 
 	// This is the producer thread.
-	std::thread produceThread(&producerThread, std::cref(dataSource));
+	thread produceThread(&producerThread, cref(dataSource));
 
 	// Create a vector of consumer threads.	
-	std::vector<std::thread> consumerThreads;
+	vector<thread> consumerThreads;
 	for(unsigned int i=0; i<numConsumerThreads; ++i)
-		consumerThreads.emplace_back(std::thread(&consumerThread));
+		consumerThreads.emplace_back(thread(&consumerThread));
 
 	// Upon finish join the producer thread.
 	produceThread.join();
 
 	// Join the consumer threads.
-	std::for_each(consumerThreads.begin(), consumerThreads.end(), [&](std::thread& t){ t.join();});
+	for_each(consumerThreads.begin(), consumerThreads.end(), [&](thread& t){ t.join();});
 
 	return(0);
 }

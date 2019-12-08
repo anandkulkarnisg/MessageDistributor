@@ -21,7 +21,7 @@ template<typename T> void MessageDistributor<T>::publish(const T& inputItem)
 	{
 		m_preBarrierPtr->await();
 	}
-	catch(const std::exception& e)
+	catch(const exception& e)
 	{
 		throw;  // Pass on the exceptions as is for further analysis or debugging.
 	}
@@ -33,7 +33,7 @@ template<typename T> void MessageDistributor<T>::publish(const T& inputItem)
 	{
 		m_postBarrierPtr->await();
 	}
-	catch(const std::exception& e)
+	catch(const exception& e)
 	{
 		throw;  // Pass on the exceptions as is for further analysis or debugging.
 	}
@@ -46,7 +46,7 @@ template<typename T> T MessageDistributor<T>::recieve()
 	{
 		m_preBarrierPtr->await();
 	}
-	catch(const std::exception& e)
+	catch(const exception& e)
 	{
 		throw;  // Pass on the exceptions as is for further analysis or debugging.
 	}
@@ -56,7 +56,7 @@ template<typename T> T MessageDistributor<T>::recieve()
 	{
 		m_postBarrierPtr->await();
 	}
-	catch(const std::exception& e)
+	catch(const exception& e)
 	{
 		throw;  // Pass on the exceptions as is for further analysis or debugging.
 	}

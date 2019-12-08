@@ -9,56 +9,56 @@
 using namespace std;
 
 const int numConsumerThreads = 5;
-MessageDistributor<std::string> distributor(numConsumerThreads); // Remember you need to pass the number of consumers waiting for producer.
-std::mutex cout_mutex;
-const long runDemoLoop = 10000;
+MessageDistributor<string> distributor(numConsumerThreads); // Remember you need to pass the number of consumers waiting for producer.
+mutex cout_mutex;
+constexpr long runDemoLoop = 10000;
 
-void printOut(const std::string& str1, const std::string& str2, const std::thread::id& id)
+void printOut(const string& str1, const string& str2, const thread::id& id)
 {
-	std::unique_lock<std::mutex> lock(cout_mutex);
-	std::cout << str1 << id << str2 << std::endl;
-	lock.unlock();
+    unique_lock<mutex> lock(cout_mutex);
+    cout << str1 << id << str2 << endl;
+    lock.unlock();
 }
 
-void producerThread(const std::vector<std::string>& dataSource)
+void producerThread(const vector<string>& dataSource)
 {
-	printOut("I am producer thread currently running from thread id =", "",  std::this_thread::get_id());
-	int i=0;
+    printOut("I am producer thread currently running from thread id =", "",  this_thread::get_id());
+    int i=0;
 
-	while(i<runDemoLoop)
-	{
-		try
-		{
-			distributor.publish(dataSource[i]);
-		}
-		catch(const std::exception& e)
-		{
-			std::cout << e.what() << std::endl;
-		}
-		++i;
-	}
+    while(i<runDemoLoop)
+    {
+        try
+        {
+            distributor.publish(dataSource[i]);
+        }
+        catch(const exception& e)
+        {
+            cout << e.what() << endl;
+        }
+        ++i;
+    }
 }
 
 void consumerThread()
 {
 
-	printOut("I am consumer thread currently running from thread id =", "",  std::this_thread::get_id());
-	std::string returnString;
-	int i=0;
+    printOut("I am consumer thread currently running from thread id =", "",  this_thread::get_id());
+    string returnString;
+    int i=0;
 
-	while(i<runDemoLoop)
-	{
-		try
-		{
-			returnString = distributor.recieve();          
-		}
-		catch(const std::exception& e)
-		{
-			std::cout << e.what() << std::endl;
-		}
-		printOut("I am consumer thread currently running from thread id =", ".The value i am having now is = " + returnString, std::this_thread::get_id());
-		++i;
-	}
+    while(i<runDemoLoop)
+    {
+        try
+        {
+            returnString = distributor.recieve();          
+        }
+        catch(const exception& e)
+        {
+            cout << e.what() << endl;
+        }
+        printOut("I am consumer thread currently running from thread id =", ".The value i am having now is = " + returnString, this_thread::get_id());
+        ++i;
+    }
 }
 
 
@@ -72,25 +72,25 @@ void consumerThread()
 
 int main(int argc, char* argv[])
 {
-	std::vector<std::string> dataSource;
-	dataSource.reserve(runDemoLoop);
+    vector<string> dataSource;
+    dataSource.reserve(runDemoLoop);
 
-	for(unsigned int i=0; i<runDemoLoop; ++i)
-		dataSource.emplace_back("Sample Message : " + std::to_string(i));
+    for(unsigned int i=0; i<runDemoLoop; ++i)
+        dataSource.emplace_back("Sample Message : " + to_string(i));
 
-	// This is the producer thread.
-	std::thread t1(&producerThread, std::cref(dataSource));
+    // This is the producer thread.
+    thread t1(&producerThread, cref(dataSource));
 
-	// Create a vector of consumer threads.	
-	std::vector<std::thread> consumerThreads;
-	for(unsigned int i=0; i<numConsumerThreads; ++i)
-		consumerThreads.emplace_back(std::thread(&consumerThread));
+    // Create a vector of consumer threads.	
+    vector<thread> consumerThreads;
+    for(unsigned int i=0; i<numConsumerThreads; ++i)
+        consumerThreads.emplace_back(thread(&consumerThread));
 
-	// Upon finish join the producer thread.
-	t1.join();
+    // Upon finish join the producer thread.
+    t1.join();
 
-	// Join the consumer threads.
-	std::for_each(consumerThreads.begin(), consumerThreads.end(), [&](std::thread& t){ t.join();});
+    // Join the consumer threads.
+    for_each(consumerThreads.begin(), consumerThreads.end(), [&](thread& t){ t.join();});
 
-	return(0);
+    return(0);
 }
