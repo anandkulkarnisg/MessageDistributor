@@ -13,8 +13,7 @@ find_package(Threads REQUIRED)
 ADD_LIBRARY(MessageDistributor SHARED MessageDistributor.cpp)
 
 add_executable(Example1.out Example1.cpp)
-target_link_libraries(Example1.out MessageDistributor pthread PocoFoundation CyclicBarrier)
-
 add_executable(Example2.out Example2.cpp)
-target_link_libraries(Example2.out MessageDistributor pthread PocoFoundation CyclicBarrier)
 
+target_link_libraries(Example1.out MessageDistributor pthread PocoFoundation CyclicBarrier)
+target_link_libraries(Example2.out MessageDistributor pthread PocoFoundation CyclicBarrier)
